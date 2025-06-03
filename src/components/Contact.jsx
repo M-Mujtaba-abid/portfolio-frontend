@@ -1,19 +1,27 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { useState } from "react"
-import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from "lucide-react"
-import axios from "axios"
+import { motion } from "framer-motion";
+import { useState } from "react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  Github,
+  Linkedin,
+  Twitter,
+} from "lucide-react";
+import axios from "axios";
 
 const Contact = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
-  })
-  const [submitStatus, setSubmitStatus] = useState(null)
+  });
+  const [submitStatus, setSubmitStatus] = useState(null);
 
   const contactInfo = [
     {
@@ -34,7 +42,7 @@ const Contact = () => {
       value: "Lahore, Pakistan",
       link: "https://www.google.com/search?q=my+locatiion&oq=my+locatiion&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIQCAEQABiDARixAxjJAxiABDINCAIQABiSAxiABBiKBTINCAMQABiDARixAxiABDIHCAQQABiABDIKCAUQABixAxiABDIHCAYQABiABDIGCAcQBRhA0gEIMjY0NmowajeoAgiwAgHxBT0lo2f4jJYk8QU9JaNn-IyWJA&sourceid=chrome&ie=UTF-8",
     },
-  ]
+  ];
 
   const socialLinks = [
     {
@@ -55,40 +63,49 @@ const Contact = () => {
       // url: "https://twitter.com/yourusername",
       color: "hover:text-blue-300",
     },
-  ]
+  ];
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus(null)
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/contact", formData)
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/contact`,
+        formData
+      );
 
       if (response.status === 200) {
-        setSubmitStatus("success")
-        setFormData({ name: "", email: "", subject: "", message: "" })
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", subject: "", message: "" });
       }
     } catch (error) {
-      setSubmitStatus("error")
-      console.error("Error sending message:", error)
+      setSubmitStatus("error");
+      console.error("Error sending message:", error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="p-8 h-full overflow-y-auto">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <h1 className="text-4xl font-bold text-white mb-2">Get In Touch</h1>
-        <p className="text-gray-300 mb-8">Let's discuss your next project or just say hello!</p>
+        <p className="text-gray-300 mb-8">
+          Let's discuss your next project or just say hello!
+        </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Form */}
@@ -99,7 +116,9 @@ const Contact = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-2xl font-bold text-white mb-6">Send Message</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">
+                Send Message
+              </h2>
 
               {submitStatus === "success" && (
                 <div className="bg-green-500/20 border border-green-500 text-green-300 p-4 rounded-lg mb-6">
@@ -116,7 +135,10 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="name" className="block text-white text-sm font-medium mb-2">
+                    <label
+                      htmlFor="name"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
                       Name
                     </label>
                     <input
@@ -131,7 +153,10 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
                       Email
                     </label>
                     <input
@@ -148,7 +173,10 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-white text-sm font-medium mb-2">
+                  <label
+                    htmlFor="subject"
+                    className="block text-white text-sm font-medium mb-2"
+                  >
                     Subject
                   </label>
                   <input
@@ -164,7 +192,10 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-white text-sm font-medium mb-2">
+                  <label
+                    htmlFor="message"
+                    className="block text-white text-sm font-medium mb-2"
+                  >
                     Message
                   </label>
                   <textarea
@@ -206,7 +237,9 @@ const Contact = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <h2 className="text-xl sm:text-l font-bold text-white mb-4">Contact Information</h2>
+              <h2 className="text-xl sm:text-l font-bold text-white mb-4">
+                Contact Information
+              </h2>
               <div className="space-y-4">
                 {contactInfo.map((info, index) => (
                   <motion.a
@@ -276,7 +309,7 @@ const Contact = () => {
         </div>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export default Contact
+export default Contact;
