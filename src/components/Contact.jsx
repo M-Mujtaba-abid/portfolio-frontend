@@ -1,314 +1,174 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useState } from "react";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  Github,
-  Linkedin,
-  Twitter,
-} from "lucide-react";
-import axios from "axios";
+import { motion } from "framer-motion";
+import { Github, Linkedin, MessageCircle, Copy, Check, MapPin } from "lucide-react";
+import { getWhatsAppLink } from "../lib/contact";
+
+const EMAIL = "mujtabaabid06@gmail.com";
+
+const socialLinks = [
+  { icon: Github, name: "GitHub", url: "https://github.com/M-Mujtaba-abid" },
+  { icon: Linkedin, name: "LinkedIn", url: "https://www.linkedin.com/in/muhammad-mujtaba-abid-5b0094369" },
+];
+
+const FloatingField = ({ label, name, type = "text", value, onChange, textarea = false }) => {
+  const Component = textarea ? "textarea" : "input";
+  return (
+    <div className="relative">
+      <Component
+        id={name}
+        name={name}
+        type={textarea ? undefined : type}
+        rows={textarea ? 5 : undefined}
+        value={value}
+        onChange={onChange}
+        placeholder=" "
+        className="peer w-full bg-slate-950/40 border border-slate-800 rounded-xl px-4 pt-5 pb-2 text-white placeholder-transparent focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/40 transition-colors resize-none"
+      />
+      <label
+        htmlFor={name}
+        className="absolute left-4 top-3.5 text-slate-500 text-sm transition-all duration-200
+          peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-500
+          peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-cyan-400
+          [&:not(:placeholder-shown)]:top-1.5 [&:not(:placeholder-shown)]:text-xs"
+      >
+        {label}
+      </label>
+    </div>
+  );
+};
 
 const Contact = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [formData, setFormData] = useState({ name: "", subject: "", message: "" });
 
-  const contactInfo = [
-    {
-      icon: Mail,
-      title: "Email",
-      value: "mujtabaabid06@...",
-      // link: "mujtabaabid06@gmail.com",
-    },
-    {
-      icon: Phone,
-      title: "Phone",
-      value: "03334140461",
-      // link: "tel:+923001234567",
-    },
-    {
-      icon: MapPin,
-      title: "Location",
-      value: "Lahore, Pakistan",
-      link: "https://www.google.com/search?q=my+locatiion&oq=my+locatiion&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIQCAEQABiDARixAxjJAxiABDINCAIQABiSAxiABBiKBTINCAMQABiDARixAxiABDIHCAQQABiABDIKCAUQABixAxiABDIHCAYQABiABDIGCAcQBRhA0gEIMjY0NmowajeoAgiwAgHxBT0lo2f4jJYk8QU9JaNn-IyWJA&sourceid=chrome&ie=UTF-8",
-    },
-  ];
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const socialLinks = [
-    {
-      icon: Github,
-      name: "GitHub",
-      url: "https://github.com/M-Mujtaba-abid",
-      color: "hover:text-gray-400",
-    },
-    {
-      icon: Linkedin,
-      name: "LinkedIn",
-      url: "www.linkedin.com/in/muhammad-mujtaba-abid-5b0094369",
-      color: "hover:text-blue-400",
-    },
-    {
-      icon: Twitter,
-      name: "Twitter",
-      // url: "https://twitter.com/yourusername",
-      color: "hover:text-blue-300",
-    },
-  ];
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleCopyEmail = async () => {
+    await navigator.clipboard.writeText(EMAIL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = async (e) => {
+  const handleWhatsAppSend = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus(null);
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/contact`,
-        formData
-      );
-
-      if (response.status === 200) {
-        setSubmitStatus("success");
-        setFormData({ name: "", email: "", subject: "", message: "" });
-      }
-    } catch (error) {
-      setSubmitStatus("error");
-      console.error("Error sending message:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    const { name, subject, message } = formData;
+    const text = `Hi Mujtaba, I'm ${name || "a visitor"}.\nSubject: ${subject || "General inquiry"}\n\n${message || "I'd like to get in touch."}`;
+    window.open(getWhatsAppLink(text), "_blank");
   };
 
   return (
-    <div className="p-8 h-full overflow-y-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-4xl font-bold text-white mb-2">Get In Touch</h1>
-        <p className="text-gray-300 mb-8">
-          Let's discuss your next project or just say hello!
-        </p>
+    <section id="contact" className="relative py-24 px-6">
+      <div className="max-w-5xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-12 text-center"
+        >
+          {/* <p className="text-cyan-400 font-mono text-sm mb-2">// contact</p> */}
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Let&apos;s build something <span className="gradient-text">great</span>
+          </h2>
+          <p className="text-slate-400 max-w-xl mx-auto">
+            Send a message below — it goes straight to my WhatsApp, no forms lost in a backend queue.
+          </p>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <motion.div
-              className="glass-effect p-6"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <motion.form
+            onSubmit={handleWhatsAppSend}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-3 rounded-2xl bg-slate-900/50 backdrop-blur-md border border-slate-800 p-6 sm:p-8 space-y-5"
+          >
+            <FloatingField label="Your Name" name="name" value={formData.name} onChange={handleChange} />
+            <FloatingField label="Subject" name="subject" value={formData.subject} onChange={handleChange} />
+            <FloatingField
+              label="Message"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              textarea
+            />
+
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-medium shadow-[0_0_25px_rgba(99,102,241,0.35)] hover:shadow-[0_0_35px_rgba(6,182,212,0.5)] transition-shadow"
             >
-              <h2 className="text-2xl font-bold text-white mb-6">
-                Send Message
-              </h2>
+              <MessageCircle className="w-4 h-4" />
+              Send via WhatsApp
+            </motion.button>
+          </motion.form>
 
-              {submitStatus === "success" && (
-                <div className="bg-green-500/20 border border-green-500 text-green-300 p-4 rounded-lg mb-6">
-                  Message sent successfully! I'll get back to you soon.
-                </div>
-              )}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-2 space-y-6"
+          >
+            <div className="rounded-2xl bg-gradient-to-br from-indigo-500/15 to-cyan-500/10 border border-indigo-500/30 p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="p-2 rounded-lg bg-indigo-500/20">
+                  <MessageCircle className="w-5 h-5 text-cyan-300" />
+                </span>
+                <h3 className="text-white font-semibold">Chat on WhatsApp</h3>
+              </div>
+              <p className="text-slate-400 text-sm mb-4">Fastest way to reach me — usually reply within the hour.</p>
+              <a
+                href={getWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium text-cyan-300 hover:text-cyan-200 transition-colors"
+              >
+                Start a chat <MessageCircle className="w-4 h-4" />
+              </a>
+            </div>
 
-              {submitStatus === "error" && (
-                <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded-lg mb-6">
-                  Error sending message. Please try again later.
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-white text-sm font-medium mb-2"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Your Name"
-                      required
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-white text-sm font-medium mb-2"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="your.email@example.com"
-                      required
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-white text-sm font-medium mb-2"
-                  >
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    placeholder="Project Discussion"
-                    required
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-white text-sm font-medium mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder="Tell me about your project..."
-                    required
-                    rows={6}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-                  />
-                </div>
-
+            <div className="rounded-2xl bg-slate-900/50 backdrop-blur-md border border-slate-800 p-6">
+              <p className="text-slate-500 text-xs mb-1">Email</p>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-white text-sm truncate">{EMAIL}</span>
                 <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-purple-800 text-white py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
+                  onClick={handleCopyEmail}
+                  className="shrink-0 p-2 rounded-lg bg-slate-800/60 text-slate-300 hover:text-cyan-300 hover:bg-slate-800 transition-colors"
+                  aria-label="Copy email"
                 >
-                  {isSubmitting ? (
-                    <span>Sending...</span>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
-                    </>
-                  )}
+                  {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                 </button>
-              </form>
-            </motion.div>
-          </div>
-
-          {/* Contact Info & Social */}
-          <div className="space-y-6">
-            {/* Contact Information */}
-            <motion.div
-              className="glass-effect p-6"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <h2 className="text-xl sm:text-l font-bold text-white mb-4">
-                Contact Information
-              </h2>
-              <div className="space-y-4">
-                {contactInfo.map((info, index) => (
-                  <motion.a
-                    key={info.title}
-                    href={info.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-200 group"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <div className="bg-purple-600 p-2 rounded-lg group-hover:bg-purple-500 transition-colors">
-                      <info.icon className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-gray-400 text-sm">{info.title}</p>
-                      <p className="text-white">{info.value}</p>
-                    </div>
-                  </motion.a>
-                ))}
               </div>
-            </motion.div>
 
-            {/* Social Links */}
-            <motion.div
-              className="glass-effect p-6"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <h2 className="text-xl font-bold text-white mb-4">Follow Me</h2>
-              <div className="flex space-x-4">
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`p-3 bg-white/10 rounded-lg text-white transition-colors duration-200 ${social.color}`}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6 + index * 0.1 }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <social.icon className="w-6 h-6" />
-                  </motion.a>
-                ))}
+              <div className="flex items-center gap-2 mt-4 text-slate-400 text-sm">
+                <MapPin className="w-4 h-4 text-indigo-400" />
+                Lahore, Pakistan
               </div>
-            </motion.div>
+            </div>
 
-            {/* Quick Response */}
-            <motion.div
-              className="bg-gradient-to-r from-purple-600 to-blue-600 p-6 rounded-lg"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7 }}
-            >
-              {/* <h3 className="text-white font-semibold mb-2">Quick Response</h3>
-              <p className="text-white/90 text-sm">
-                I typically respond within 24 hours. For urgent matters, feel free to call me directly.
-              </p> */}
-            </motion.div>
-          </div>
+            <div className="flex gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900/50 backdrop-blur-md border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors text-sm"
+                >
+                  <social.icon className="w-4 h-4" />
+                  {social.name}
+                </a>
+              ))}
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </section>
   );
 };
 
