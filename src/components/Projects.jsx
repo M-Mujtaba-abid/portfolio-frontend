@@ -63,7 +63,7 @@ const Projects = () => {
         >
           {/* <p className="text-cyan-400 font-mono text-sm mb-2">// projects</p> */}
           <h2 className="text-3xl sm:text-4xl font-bold text-white">
-            Things I've <span className="gradient-text">built</span>
+            Things I&apos;ve <span className="gradient-text">built</span>
           </h2>
         </motion.div>
 

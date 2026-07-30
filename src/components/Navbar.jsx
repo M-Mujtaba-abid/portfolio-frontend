@@ -58,7 +58,7 @@ const Navbar = () => {
             onClick={() => handleNavClick("contact")}
             className="px-4 py-2 rounded-lg text-sm font-medium bg-indigo-500/10 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/20 hover:shadow-[0_0_20px_rgba(99,102,241,0.35)] transition-all"
           >
-            Let's Talk
+            Let&apos;s Talk
           </button>
         </div>
 

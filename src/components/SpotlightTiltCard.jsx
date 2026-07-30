@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const SpotlightTiltCard = ({ children, className = "", tilt = true, spotlightColor = "99,102,241" }) => {
   const ref = useRef(null);

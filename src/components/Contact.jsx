@@ -70,7 +70,7 @@ const Contact = () => {
         >
           {/* <p className="text-cyan-400 font-mono text-sm mb-2">// contact</p> */}
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-            Let's build something <span className="gradient-text">great</span>
+            Let&apos;s build something <span className="gradient-text">great</span>
           </h2>
           <p className="text-slate-400 max-w-xl mx-auto">
             Send a message below — it goes straight to my WhatsApp, no forms lost in a backend queue.

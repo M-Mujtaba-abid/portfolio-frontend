@@ -67,7 +67,7 @@ const Hero = () => {
           </h1>
 
           <p className="text-slate-400 text-lg mb-8 h-8">
-            I'm Mujtaba —{" "}
+            I&apos;m Mujtaba —{" "}
             <span className="text-cyan-400 font-semibold">
               {typedRole}
               <span className="inline-block w-0.5 h-5 -mb-1 ml-0.5 bg-cyan-400 animate-blink" />
