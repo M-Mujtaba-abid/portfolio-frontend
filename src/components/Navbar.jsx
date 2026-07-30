@@ -41,7 +41,7 @@ const Navbar = () => {
           onClick={() => handleNavClick("hero")}
           className="text-lg font-bold gradient-text bg-[length:200%_auto] animate-gradient-x"
         >
-          Mujtaba Abid
+          M. Mujtaba Abid
         </button>
 
         <div className="hidden md:flex items-center gap-8">
