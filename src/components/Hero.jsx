@@ -146,7 +146,14 @@ const Hero = () => {
           <div className="relative h-[340px] sm:h-[440px] lg:h-full lg:min-h-[520px]">
             <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-indigo-500/30 to-cyan-500/30 blur-3xl animate-float-slow" />
             <div className="absolute inset-0 rounded-[2rem] ring-1 ring-white/10 overflow-hidden shadow-2xl">
-              <img src="/my.jpg" alt="Muhammad Mujtaba Abid" className="w-full h-full object-cover" />
+              <img src="/my.jpeg" alt="Muhammad Mujtaba Abid" className="w-full h-full object-cover" />
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(circle at top left, rgba(99,102,241,0.55), transparent 45%), radial-gradient(circle at top right, rgba(6,182,212,0.5), transparent 45%), radial-gradient(circle at bottom left, rgba(6,182,212,0.5), transparent 45%), radial-gradient(circle at bottom right, rgba(99,102,241,0.55), transparent 45%)",
+                }}
+              />
             </div>
           </div>
         </motion.div>
